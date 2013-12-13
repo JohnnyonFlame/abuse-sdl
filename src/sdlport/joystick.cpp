@@ -49,7 +49,9 @@ void joy_poll(int &x, int &y)
 	if (!joystick) return;
 
 	SDL_JoystickUpdate();
-	int tx = SDL_JoystickGetAxis(joystick, 0), ty = SDL_JoystickGetAxis(joystick, 1);
+
+	int tx = SDL_JoystickGetAxis(joystick, 0),
+			ty = SDL_JoystickGetAxis(joystick, 1);
 
 	if ((abs(ty) > 1200) || (abs(tx) > 1200))
 	{
@@ -61,6 +63,9 @@ void joy_poll(int &x, int &y)
 		x = prev_x;
 		y = prev_y;
 	}
+
+	x >>= 6;
+	y >>= 6;
 }
 
 int joy_exists(){
