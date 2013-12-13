@@ -1372,10 +1372,10 @@ Game::Game(int argc, char **argv) {
 
 	chat = new chat_console(console_font, 50, 6);
 
-	if (!wm->has_mouse()) {
+	if (!wm->has_mouse() && !joy_exists()) {
 		close_graphics();
 		image_uninit();
-		printf("No mouse driver detected, please rectify.\n");
+		printf("No mouse or joystick driver detected, please rectify.\n");
 		exit(0);
 	}
 
