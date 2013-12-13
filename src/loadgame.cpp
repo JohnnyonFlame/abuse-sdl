@@ -256,7 +256,7 @@ int load_game(int show_all, char const *title) // return 0 if the player escapes
 			thumb_nails[draw_num]->put_image(preview->screen, preview->x1(),
 					preview->y1());
 		}
-		else if ((ev.type == EV_CLOSE_WINDOW) || (ev.type == EV_KEY && ev.key == JK_ESC))
+		else if ((ev.type == EV_CLOSE_WINDOW) || (ev.type == EV_KEY && ev.key == JK_ALT_L))
 		{
 			quit = 1;
 		}
