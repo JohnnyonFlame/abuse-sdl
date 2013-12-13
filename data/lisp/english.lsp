@@ -208,7 +208,7 @@
 	 (setq level_size "Level size")
                            ; 012345678901234567 (please keep same allignment of Name level & total)
 	 (setq score_header "Name              Level Total")   ; V-E
-	 (setq space_cont "Press SPACEBAR to continue")        ; V-E
+	 (setq space_cont "Press Y to continue")        ; V-E
 	 (setq no_saved "No saved game")
 
 	 (setq lvl_2   "Small") ; V-C added
