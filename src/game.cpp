@@ -293,11 +293,12 @@ void Game::mouse_to_game(int32_t x, int32_t y, int32_t &gamex, int32_t &gamey,
 		}
 	}
 
-	if (has_joystick)
+	if (has_joystick) {
 		joy_poll(gamex, gamey);
 
-	gamex += f->x_center();
-	gamey += f->y_center();
+		gamex += f->x_center();
+		gamey += f->y_center();
+	}
 }
 
 void Game::game_to_mouse(int32_t gamex, int32_t gamey, view *which, int32_t &x,
