@@ -16545,7 +16545,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /*    #include <OpenGL/gl.h>*/
     #error	/* Error so the compile fails on OSX */
     #else
-    #include <GL/gl.h>
+    #include <GL/foogl.h>
     #endif
 int
 main ()

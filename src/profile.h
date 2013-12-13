@@ -22,5 +22,4 @@ void profile_toggle();
 int profile_handle_event(event &ev);
 int profiling();
 
-
 #endif

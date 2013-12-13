@@ -31,113 +31,100 @@
 #include "image.h"
 #include "filter.h"
 #include "mouse.h"
+#include "joy.h"
 
-unsigned char def_mouse[]=
-{
-    0,2,0,0,0,0,0,0,
-    2,1,2,0,0,0,0,0,
-    2,1,1,2,0,0,0,0,
-    2,1,1,1,2,0,0,0,
-    2,1,1,1,1,2,0,0,
-    2,1,1,1,1,1,2,0,
-    0,2,1,1,2,2,0,0,
-    0,0,2,1,1,2,0,0,
-    0,0,2,1,1,2,0,0,
-    0,0,0,2,2,0,0,0
-};
+unsigned char def_mouse[] = { 0, 2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 2,
+		1, 1, 2, 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 2, 1, 1, 1, 1, 2, 0, 0, 2,
+		1, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 2, 2, 0, 0, 0, 0, 2, 1, 1, 2, 0, 0, 0,
+		0, 2, 1, 1, 2, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0 };
 
 //
 // Constructor
 //
-JCMouse::JCMouse( image *Screen, palette *pal )
-{
-    image *im;
-    int br, dr;
-    Filter f;
-    but = 0;
-    cx = cy = 0;
-    here = 1;
-    sp = NULL;
+JCMouse::JCMouse(image *Screen, palette *pal) {
+	image *im;
+	int br, dr;
+	Filter f;
+	but = 0;
+	cx = cy = 0;
+	here = 1;
+	sp = NULL;
 
-    screen = Screen;
-    br = pal->brightest( 1 );
-    dr = pal->darkest( 1 );
-    f.Set( 1, br );
-    f.Set( 2, dr );
-    im = new image(vec2i(8, 10), def_mouse);
-    f.Apply( im );
-    sp = new sprite(Screen, im, 100, 100);
-    mx = Screen->Size().x / 2;
-    my = Screen->Size().y / 2;
+	screen = Screen;
+	br = pal->brightest(1);
+	dr = pal->darkest(1);
+	f.Set(1, br);
+	f.Set(2, dr);
+
+	if (!joy_exists())
+		im = new image(vec2i(8, 10), def_mouse);
+	else
+		im = new image(vec2i(0,0), NULL);
+
+	f.Apply(im);
+	sp = new sprite(Screen, im, 100, 100);
+	mx = Screen->Size().x / 2;
+	my = Screen->Size().y / 2;
 }
 
 //
 // Destructor
 //
-JCMouse::~JCMouse()
-{
-    if( sp )
-    {
-        delete sp->visual;
-        delete sp;
-    }
+JCMouse::~JCMouse() {
+	if (sp) {
+		delete sp->visual;
+		delete sp;
+	}
 }
 
 //
 // set_shape()
 // Set the shape of the mouse cursor
 //
-void JCMouse::set_shape( image *im, int centerx, int centery )
-{
-    sp->change_visual( im, 1 );
-    cx = -centerx;
-    cy = -centery;
+void JCMouse::set_shape(image *im, int centerx, int centery) {
+	if (!joy_exists())
+		sp->change_visual(im, 1);
+
+	cx = -centerx;
+	cy = -centery;
 }
 
 //
 // set_position()
 // Set the position of the mouse cursor
 //
-void JCMouse::set_position( int new_mx, int new_my )
-{
-    // Make sure the values we are given are sensible.
-    if( new_mx > screen->Size().x - 1 )
-    {
-        new_mx = screen->Size().x - 1;
-    }
-    if( new_my > screen->Size().y - 1 )
-    {
-        new_my = screen->Size().y - 1;
-    }
+void JCMouse::set_position(int new_mx, int new_my) {
+	// Make sure the values we are given are sensible.
+	if (new_mx > screen->Size().x - 1) {
+		new_mx = screen->Size().x - 1;
+	}
+	if (new_my > screen->Size().y - 1) {
+		new_my = screen->Size().y - 1;
+	}
 
-    // Set the new position
-    mx = new_mx;
-    my = new_my;
-    SDL_WarpMouse( new_mx, new_my );
+	// Set the new position
+	mx = new_mx;
+	my = new_my;
+	SDL_WarpMouse(new_mx, new_my);
 }
 
 //
 // update()
 // Update the mouses position and buttons states
 //
-void JCMouse::update( int newx, int newy, int new_but )
-{
-    if( newx < 0 )
-    {
-        Uint8 mask;
+void JCMouse::update(int newx, int newy, int new_but) {
+	if (newx < 0) {
+		Uint8 mask;
 
-        lx = mx;
-        ly = my;
-        lbut = but;
-        mask = SDL_GetMouseState( &mx, &my );
-        but = ( ( mask & SDL_BUTTON(1) ) != 0 ) |
-              ( ( mask & SDL_BUTTON(2) ) != 0 ) << 2 |
-              ( ( mask & SDL_BUTTON(3) ) != 0 ) << 1;
-    }
-    else
-    {
-        mx = newx;
-        my = newy;
-        but = new_but;
-    }
+		lx = mx;
+		ly = my;
+		lbut = but;
+		mask = SDL_GetMouseState(&mx, &my);
+		but = ((mask & SDL_BUTTON(1)) != 0) | ((mask & SDL_BUTTON(2)) != 0) << 2
+				| ((mask & SDL_BUTTON(3)) != 0) << 1;
+	} else {
+		mx = newx;
+		my = newy;
+		but = new_but;
+	}
 }

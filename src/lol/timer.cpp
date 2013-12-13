@@ -31,101 +31,96 @@
 
 #include "common.h"
 
-namespace lol
-{
+namespace lol {
 
 /*
  * Timer implementation class
  */
 
-class TimerData
-{
-    friend class Timer;
+class TimerData {
+	friend class Timer;
 
 private:
-    TimerData()
-    {
+	TimerData() {
 #if defined __linux__ || defined __APPLE__
-        gettimeofday(&tv0, NULL);
+		gettimeofday(&tv0, NULL);
 #elif defined _WIN32
-        QueryPerformanceCounter(&cycles0);
+		QueryPerformanceCounter(&cycles0);
 #elif defined __CELLOS_LV2__
-        SYS_TIMEBASE_GET(cycles0);
+		SYS_TIMEBASE_GET(cycles0);
 #else
-        SDL_Init(SDL_INIT_TIMER);
-        ticks0 = SDL_GetTicks();
+		SDL_Init(SDL_INIT_TIMER);
+		ticks0 = SDL_GetTicks();
 #endif
-    }
+	}
 
-    float GetOrWait(float deltams, bool update)
-    {
-        float ret, towait;
+	float GetOrWait(float deltams, bool update) {
+		float ret, towait;
 #if defined __linux__ || defined __APPLE__
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
-        ret = 1e-3f * (tv.tv_usec - tv0.tv_usec)
-            + 1e3f * (tv.tv_sec - tv0.tv_sec);
-        if (update)
-            tv0 = tv;
-        towait = deltams - ret;
-        if (towait > 0.0f)
-            usleep((int)(towait * 1e3f));
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		ret = 1e-3f * (tv.tv_usec - tv0.tv_usec)
+				+ 1e3f * (tv.tv_sec - tv0.tv_sec);
+		if (update)
+			tv0 = tv;
+		towait = deltams - ret;
+		if (towait > 0.0f)
+			usleep((int) (towait * 1e3f));
 #elif defined _WIN32
-        LARGE_INTEGER cycles;
-        QueryPerformanceCounter(&cycles);
-        static float ms_per_cycle = GetMsPerCycle();
-        ret = ms_per_cycle * (cycles.QuadPart - cycles0.QuadPart);
-        if (update)
-            cycles0 = cycles;
-        towait = deltams - ret;
-        if (towait > 5e-4f)
-            Sleep((int)(towait + 0.5f));
+		LARGE_INTEGER cycles;
+		QueryPerformanceCounter(&cycles);
+		static float ms_per_cycle = GetMsPerCycle();
+		ret = ms_per_cycle * (cycles.QuadPart - cycles0.QuadPart);
+		if (update)
+		cycles0 = cycles;
+		towait = deltams - ret;
+		if (towait > 5e-4f)
+		Sleep((int)(towait + 0.5f));
 #elif defined __CELLOS_LV2__
-        uint64_t cycles;
-        SYS_TIMEBASE_GET(cycles);
-        static float ms_per_cycle = GetMsPerCycle();
-        ret = ms_per_cycle * (cycles - cycles0);
-        if (update)
-            cycles0 = cycles;
-        towait = deltams - ret;
-        if (towait > 0.0f)
-            sys_timer_usleep((int)(towait * 1e3f));
+		uint64_t cycles;
+		SYS_TIMEBASE_GET(cycles);
+		static float ms_per_cycle = GetMsPerCycle();
+		ret = ms_per_cycle * (cycles - cycles0);
+		if (update)
+		cycles0 = cycles;
+		towait = deltams - ret;
+		if (towait > 0.0f)
+		sys_timer_usleep((int)(towait * 1e3f));
 #else
-        /* The crappy SDL fallback */
-        Uint32 ticks = SDL_GetTicks();
-        ret = ticks - ticks0;
-        if (update)
-            ticks0 = ticks;
-        towait = deltams - ret;
-        if (towait > 0.5f)
-            SDL_Delay((int)(towait + 0.5f));
+		/* The crappy SDL fallback */
+		Uint32 ticks = SDL_GetTicks();
+		ret = ticks - ticks0;
+		if (update)
+		ticks0 = ticks;
+		towait = deltams - ret;
+		if (towait > 0.5f)
+		SDL_Delay((int)(towait + 0.5f));
 #endif
-        return ret;
-    }
+		return ret;
+	}
 
-    static float GetMsPerCycle()
-    {
+	static float GetMsPerCycle() {
 #if defined __linux__ || defined __APPLE__
-        return 1.0f;
+		return 1.0f;
 #elif defined _WIN32
-        LARGE_INTEGER tmp;
-        QueryPerformanceFrequency(&tmp);
-        return = 1e3f / tmp.QuadPart;
+		LARGE_INTEGER tmp;
+		QueryPerformanceFrequency(&tmp);
+		return = 1e3f / tmp.QuadPart;
 #elif defined __CELLOS_LV2__
-        return 1e3f / sys_time_get_timebase_frequency();
+		return 1e3f / sys_time_get_timebase_frequency();
 #else
-        return 1.0f;
+		return 1.0f;
 #endif
-    }
+	}
 
 #if defined __linux__ || defined __APPLE__
-    struct timeval tv0;
+	struct timeval tv0;
 #elif defined _WIN32
-    LARGE_INTEGER cycles0;
+	LARGE_INTEGER cycles0;
 #elif defined __CELLOS_LV2__
-    uint64_t cycles0;
+	uint64_t cycles0;
 #else
-    Uint32 ticks0;
+	Uint32 ticks0;
 #endif
 };
 
@@ -133,29 +128,24 @@ private:
  * Timer public class
  */
 
-Timer::Timer()
-  : data(new TimerData())
-{
+Timer::Timer() :
+		data(new TimerData()) {
 }
 
-Timer::~Timer()
-{
-    delete data;
+Timer::~Timer() {
+	delete data;
 }
 
-float Timer::GetMs()
-{
-    return data->GetOrWait(0.0f, true);
+float Timer::GetMs() {
+	return data->GetOrWait(0.0f, true);
 }
 
-float Timer::PollMs()
-{
-    return data->GetOrWait(0.0f, false);
+float Timer::PollMs() {
+	return data->GetOrWait(0.0f, false);
 }
 
-void Timer::WaitMs(float deltams)
-{
-    (void)data->GetOrWait(deltams, false);
+void Timer::WaitMs(float deltams) {
+	(void) data->GetOrWait(deltams, false);
 }
 
 } /* namespace lol */

@@ -16,26 +16,23 @@
 #if !defined __LOL_TIMER_H__
 #define __LOL_TIMER_H__
 
-namespace lol
-{
+namespace lol {
 
 class TimerData;
 
-class Timer
-{
+class Timer {
 public:
-    Timer();
-    ~Timer();
+	Timer();
+	~Timer();
 
-    float GetMs();
-    float PollMs();
-    void WaitMs(float deltams);
+	float GetMs();
+	float PollMs();
+	void WaitMs(float deltams);
 
 private:
-    TimerData *data;
+	TimerData *data;
 };
 
 } /* namespace lol */
 
 #endif // __LOL_TIMER_H__
-

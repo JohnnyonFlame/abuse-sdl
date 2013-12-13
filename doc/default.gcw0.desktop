@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Abuse
+Comment=Control Nick Vrenna in a struggle to escape from Abuse
+Exec=abuse.sh
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=abuse
+Categories=games;

@@ -11,18 +11,17 @@
 #ifndef __TIMING_HPP_
 #define __TIMING_HPP_
 
-class time_marker
-{
+class time_marker {
 public:
 #if defined __CELLOS_LV2__
-    uint64_t ticks;
+	uint64_t ticks;
 #else
-    long seconds;
-    long micro_seconds;
+	long seconds;
+	long micro_seconds;
 #endif
-    void get_time();
-    time_marker();
-    double diff_time(time_marker *other); // return time diff in seconds
+	void get_time();
+	time_marker();
+	double diff_time(time_marker *other); // return time diff in seconds
 };
 
 #endif

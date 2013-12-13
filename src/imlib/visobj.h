@@ -14,13 +14,13 @@
 #include "jwindow.h"
 #include "filter.h"
 
-class visual_object
-{
+class visual_object {
 public:
-    virtual void draw(image *screen, int x, int y, Filter *f) = 0;
-    virtual int width() = 0;
-    virtual int height() = 0;
-    virtual ~visual_object() { }
+	virtual void draw(image *screen, int x, int y, Filter *f) = 0;
+	virtual int width() = 0;
+	virtual int height() = 0;
+	virtual ~visual_object() {
+	}
 };
 
 #endif

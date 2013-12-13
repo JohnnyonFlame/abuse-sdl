@@ -22,23 +22,55 @@
 #   include "config.h"
 #endif
 
+#include <SDL.h>
 #include "joy.h"
 
 /* NOTE: No joystick support yet.
  */
 
-int joy_init( int argc, char **argv )
-{
-    /* Do Nothing */
-    return 0;
+SDL_Joystick *joystick = NULL;
+
+int joy_init(int argc, char **argv) {
+	/* Do Nothing */
+	if (!SDL_WasInit(SDL_INIT_JOYSTICK))
+		SDL_Init(SDL_INIT_JOYSTICK);
+
+	if (SDL_NumJoysticks() > 0)
+	{
+		joystick = SDL_JoystickOpen(0);
+	}
+
+	return joystick>0;
 }
 
-void joy_status( int &b1, int &b2, int &b3, int &xv, int &yv )
+int prev_x, prev_y;
+void joy_poll(int &x, int &y)
 {
-    /* Do Nothing */
+	if (!joystick) return;
+
+	SDL_JoystickUpdate();
+	int tx = SDL_JoystickGetAxis(joystick, 0), ty = SDL_JoystickGetAxis(joystick, 1);
+
+	if ((abs(ty) > 1200) || (abs(tx) > 1200))
+	{
+		prev_x = x = tx;
+		prev_y = y = ty;
+	}
+	else
+	{
+		x = prev_x;
+		y = prev_y;
+	}
 }
 
-void joy_calibrate()
-{
-    /* Do Nothing */
+int joy_exists(){
+	return joystick > 0;
+}
+
+void joy_status(int &b1, int &b2, int &b3, int &xv, int &yv) {
+	/* Do Nothing */
+}
+
+void joy_calibrate() {
+	/* Do Nothing */
 }

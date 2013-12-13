@@ -13,38 +13,55 @@
 #include "image.h"
 #include "transimage.h"
 
-
-
-class texture_font
-{
-  int tl,th;
-  image *let,*fntpat;
+class texture_font {
+	int tl, th;
+	image *let, *fntpat;
 public:
-  texture_font(image *letters, image *font_pattern=NULL);
-  void put_char(image *screen,  int x, int y, char ch);
-  void put_string(image *screen, int x, int y, char const *st);
-  int height() { return th; }
-  int length() { return tl; }
-  int width() { return tl; }
-  image *font_image() { return let; }
-  image *font_patter() { return fntpat; }
-  ~texture_font() { if (let) delete let; if (fntpat) delete fntpat; }
-} ;
+	texture_font(image *letters, image *font_pattern = NULL);
+	void put_char(image *screen, int x, int y, char ch);
+	void put_string(image *screen, int x, int y, char const *st);
+	int height() {
+		return th;
+	}
+	int length() {
+		return tl;
+	}
+	int width() {
+		return tl;
+	}
+	image *font_image() {
+		return let;
+	}
+	image *font_patter() {
+		return fntpat;
+	}
+	~texture_font() {
+		if (let)
+			delete let;
+		if (fntpat)
+			delete fntpat;
+	}
+};
 
-class JCFont
-{
-  int tl,th;
-  TransImage *let[256];
+class JCFont {
+	int tl, th;
+	TransImage *let[256];
 public:
-  JCFont(image *letters);
-  void put_char(image *screen,  int x, int y, char ch, int color=-1);
-  void put_string(image *screen, int x, int y, char const *st, int color=-1);
-  int height() { return th; }
-  int length() { return tl; }
-  int width() { return tl; }
-  ~JCFont();
-} ;
+	JCFont(image *letters);
+	void put_char(image *screen, int x, int y, char ch, int color = -1);
+	void put_string(image *screen, int x, int y, char const *st,
+			int color = -1);
+	int height() {
+		return th;
+	}
+	int length() {
+		return tl;
+	}
+	int width() {
+		return tl;
+	}
+	~JCFont();
+};
 
 #endif
-
 

@@ -19,36 +19,32 @@
 #include "points.h"
 #include "dev.h"
 
-point_list::point_list(unsigned char how_many, unsigned char *Data)
-{
-  tot=how_many;
-  if (tot)
-  {
-    data=(unsigned char *)malloc((int)how_many*2);
-    memcpy(data,Data,(int)tot*2);
-  } else data=NULL;
+point_list::point_list(unsigned char how_many, unsigned char *Data) {
+	tot = how_many;
+	if (tot) {
+		data = (unsigned char *) malloc((int) how_many * 2);
+		memcpy(data, Data, (int) tot * 2);
+	} else
+		data = NULL;
 }
 
-point_list::point_list(bFILE *fp)
-{
-  fp->read(&tot,1);
-  if (tot)
-  {
-    data=(unsigned char *)malloc((int)tot*2);
-    fp->read(data,(int)tot*2);
+point_list::point_list(bFILE *fp) {
+	fp->read(&tot, 1);
+	if (tot) {
+		data = (unsigned char *) malloc((int) tot * 2);
+		fp->read(data, (int) tot * 2);
 
-    int i;
-    for (i=0; i<tot*2; i++)
-      data[i]=data[i]*scale_mult/scale_div;
+		int i;
+		for (i = 0; i < tot * 2; i++)
+			data[i] = data[i] * scale_mult / scale_div;
 
-  } else data=NULL;
+	} else
+		data = NULL;
 }
 
-void point_list::save(bFILE *fp)
-{
-  fp->write(&tot,1);
-  if (tot) fp->write(data,(int)tot*2);
+void point_list::save(bFILE *fp) {
+	fp->write(&tot, 1);
+	if (tot)
+		fp->write(data, (int) tot * 2);
 }
-
-
 
