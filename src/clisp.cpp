@@ -2667,7 +2667,12 @@ long c_caller(long number, void *args) {
 		break;
 	case 263: {
 		the_game->reset_keymap();
-		return load_game(1, symbol_str("SAVE")); //get_save_spot(); shit
+
+		wm->set_mouse_shape(cache.img(c_normal)->copy(), 1, 1); //joy aim hack
+		int ret_load = load_game(1, symbol_str("SAVE")); //get_save_spot(); shit
+		wm->set_mouse_shape(cache.img(c_target)->copy(), 8, 8); //joy aim hack
+
+		return ret_load;
 	}
 		break;
 	case 264: {

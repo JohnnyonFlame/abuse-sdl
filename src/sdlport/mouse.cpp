@@ -82,8 +82,16 @@ JCMouse::~JCMouse() {
 // Set the shape of the mouse cursor
 //
 void JCMouse::set_shape(image *im, int centerx, int centery) {
-	if (!joy_exists())
+	if (!joy_exists() || ((centerx == -8) && (centery == -8))) //If there's a joystick, only draw aim if it's positioned on center (aka it's a crosshair)
 		sp->change_visual(im, 1);
+	else
+	{
+		if (im)
+			delete im;
+
+		im = new image(vec2i(0,0), NULL);
+		sp->change_visual(im, 1);
+	}
 
 	cx = -centerx;
 	cy = -centery;

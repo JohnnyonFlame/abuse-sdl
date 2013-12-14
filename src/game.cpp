@@ -296,6 +296,8 @@ void Game::mouse_to_game(int32_t x, int32_t y, int32_t &gamex, int32_t &gamey,
 	if (has_joystick) {
 		joy_poll(gamex, gamey);
 
+		wm->set_mouse_position(f->x_center() - f->xoff() + (gamex >> 3), f->y_center() - f->yoff() + (gamey >> 3) - 10);
+
 		gamex += f->x_center();
 		gamey += f->y_center();
 	}
