@@ -1032,7 +1032,7 @@ void Game::draw_map(view *v, int interpolate) {
 				screen = old_screen;
 			} else {
 				screen->dirt_on();
-				if (xres * yres <= 64000)
+				if (xres * yres <= 76800)
 					light_screen(screen, xoff, yoff, white_light, v->ambient);
 				else
 					light_screen(screen, xoff, yoff, white_light, 63); // no lighting for hi - rez
