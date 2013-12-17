@@ -1413,14 +1413,15 @@ void get_prof_assoc_filename(char *filename, char *prof_filename) {
 }
 
 void level::level_loaded_notify() {
-	char *n;
+	char *n, *n2;
 	if (first_name)
 		n = first_name;
 	else
 		n = name();
-	if (strstr(n, "levels/level")) {
+	if ((n2 = strcasestr(n, "levels/level"))) {
 		char nm[100];
-		sprintf(nm, "music/abuse%c%c.hmi", n[12], n[13]);
+		sprintf(nm, "music/abuse%c%c.hmi", n2[12], n2[13]);
+
 		bFILE *fp = open_file(nm, "rb");
 		if (fp->open_failure()) {
 			delete fp;
