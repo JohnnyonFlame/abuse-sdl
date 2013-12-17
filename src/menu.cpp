@@ -594,6 +594,7 @@ ico_button *make_default_buttons(int x, int &y, ico_button *append_list) {
 
 	if (prot) {
 		sell = load_icon(11, ID_NETWORKING, x, y, h, NULL, "ic_networking");
+		sell->deactivate_me();
 		y += h;
 	} else {
 		sell = load_icon(2, ID_SHOW_SELL, x, y, h, NULL, "ic_sell");
