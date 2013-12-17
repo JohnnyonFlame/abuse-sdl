@@ -621,7 +621,8 @@ void InputManager::handle_event(event &ev, Jwindow *j) {
 				}
 			}
 
-			active->draw(1, screen);
+			if (active)
+				active->draw(1, screen);
 		}
 
 		if (ev.type == EV_KEY && ((ev.key == JK_TAB) || (ev.key == JK_DOWN))) {
@@ -630,14 +631,16 @@ void InputManager::handle_event(event &ev, Jwindow *j) {
 
 				do {
 					active = active->next;
-					if (!active)
-						active = first;
 				} while (active && !active->selectable());
+
+				if (!active)
+					active = first;
 			}
 			else
 				active = first;
 
-			active->draw(1, screen);
+			if (active)
+				active->draw(1, screen);
 		}
 	} else
 		active = grab;
